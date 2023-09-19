@@ -1,4 +1,4 @@
-from main import ltmgpt
+from ltmgpt import ltmgpt
 
 
 

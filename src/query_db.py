@@ -13,7 +13,7 @@ class CollectionOperator():
     def add(self, text, metadata = {}):
         self.collection.add(
             documents = [text],
-            # metadatas = [metadata],
+            # metadatas = [metadata], #add timestamp, add embeddings
             ids = [str(uuid.uuid4())]
         )
 
