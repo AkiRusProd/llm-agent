@@ -29,7 +29,7 @@ class CollectionOperator():
             return query
 
 
-collection_operator = CollectionOperator("queries")
+# collection_operator = CollectionOperator("queries")
 
 # examples of memory queries:
 # collection_operator.add("Rustam Akimov, computer science student who enjoys programming in his free time. He`s age is 20 years old.")
