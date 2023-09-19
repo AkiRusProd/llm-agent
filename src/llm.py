@@ -24,7 +24,8 @@ class LLM():
             # queries += f"{self.user}: {request}\n{self.assistant}: {query}"
             queries += f"MEMORY {i}: {query}\n"
 
-        queries += f"{self.user}: {self.context(request)}\n{self.assistant}: "
+        # queries += f"{self.user}: {self.context(request)}\n{self.assistant}: "
+        queries += f"{self.context(request)}\n{self.assistant}: "
 
         # print(queries)
 

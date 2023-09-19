@@ -23,4 +23,4 @@ ltmgpt = LTMGPT(llm, collection_operator)
 
 print(ltmgpt.response("What is the student name?"))
 print(ltmgpt.response("What is the student`s interests?"))
-print(ltmgpt.response("How old is Rustam Akimov?"))
+print(ltmgpt.response("How old is this student?"))
