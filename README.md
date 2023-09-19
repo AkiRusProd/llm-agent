@@ -30,7 +30,6 @@ Model answers:
     "The student's name is Rustam Akimov."    
     "Based on the information provided, it appears that Rustam Akimov's interests include playing guitar, watching movies, listening to music, reading books, and programming in his free time."    
     "Based on the information provided in the memory statements, we can determine that Rustam Akimov's age is 20 years old."
-  
 ]
 ```
 
