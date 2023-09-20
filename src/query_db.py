@@ -30,7 +30,9 @@ class CollectionOperator():
 
 
 # collection_operator = CollectionOperator("queries")
-
+# print(collection_operator.client.list_collections())
+# print(len(collection_operator.collection.get()["ids"]))
+# print(collection_operator.collection.get()["documents"])
 # examples of memory queries:
 # collection_operator.add("Rustam Akimov, computer science student who enjoys programming in his free time. He`s age is 20 years old.")
 # collection_operator.add("Technologies used by Rustam Akimov: numpy, pandas, pytorch, docker, git, sql, linux etc.")
