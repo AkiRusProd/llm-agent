@@ -1,19 +1,19 @@
-from ltm_agent import ltm_agent
+from llm_agent import llm_agent
 
 
 
 def chat():
     """Experiment with the GPT4All model."""
-    ltm_agent.llm.streaming = True
+    llm_agent.llm.streaming = True
     system_template = 'A chat between a curious user and an artificial intelligence assistant.'
 
-    with ltm_agent.llm.gpt.chat_session(system_template):
+    with llm_agent.llm.gpt.chat_session(system_template):
         while True:
             user_text_request = input("You > ")
 
-            bot_text_response = ltm_agent.response(user_text_request)
+            bot_text_response = llm_agent.generate(user_text_request)
             
-            if ltm_agent.llm.streaming:
+            if llm_agent.llm.streaming:
                 print(f"Bot <", end = ' ')
                 for token in bot_text_response:
                     print(token, end = '')
@@ -21,4 +21,5 @@ def chat():
             else:
                 print(f"Bot < {bot_text_response}")
 
-chat()
+if __name__ == "__main__":
+    chat()

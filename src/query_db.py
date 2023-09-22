@@ -1,21 +1,27 @@
 import chromadb
 import uuid
+import datetime
 from embedder import Embedder
 
 
 
 class CollectionOperator():
-    def __init__(self, collection_name, db_path = "src/db/"):
-        self.embedder = Embedder()
+    def __init__(self, collection_name, db_path = "src/db/", embedder: Embedder = None):
+        self.embedder = embedder
         self.client = chromadb.PersistentClient(path = db_path)
         self.collection = self.client.get_or_create_collection(name = collection_name, embedding_function = self.embedder.get_embeddings)
 
     def add(self, text, metadata = {}):
+        metadata['timestamp'] = str(datetime.datetime.now())
+
         self.collection.add(
             documents = [text],
-            # metadatas = [metadata], #add timestamp, add embeddings
+            metadatas = [metadata], # add embeddings
             ids = [str(uuid.uuid4())]
         )
+
+    def delete(self, id):
+        self.collection.delete(id)
 
     def query(self, query, n_results, return_text = True):
         query = self.collection.query(
@@ -29,13 +35,9 @@ class CollectionOperator():
             return query
 
 
-# collection_operator = CollectionOperator("queries")
+# collection_operator = CollectionOperator("total-memory", embedder = Embedder())
 # print(collection_operator.client.list_collections())
 # print(len(collection_operator.collection.get()["ids"]))
+# print(collection_operator.collection.get()["ids"])
 # print(collection_operator.collection.get()["documents"])
-# examples of memory queries:
-# collection_operator.add("Rustam Akimov, computer science student who enjoys programming in his free time. He`s age is 20 years old.")
-# collection_operator.add("Technologies used by Rustam Akimov: numpy, pandas, pytorch, docker, git, sql, linux etc.")
-# collection_operator.add("Rustam`s interests: playing guitar, watching movies, listening to music, reading books, etc.")
-
-# print(collection_operator.query("What is the student name?", 2))
+# collection_operator.collection.delete('b10b92b8-e1db-4428-874b-256e51f52117')
