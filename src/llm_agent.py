@@ -1,12 +1,15 @@
 from llm import LLM
 from query_db import CollectionOperator
+from search_engine import SearchEngine
 from summarizer import Summarizer
 from embedder import Embedder
 from utils import logging
 
 
+search_engine = SearchEngine()
 summarizer = Summarizer()
 embedder = Embedder()
+
 
 
 llm = LLM("D:\\Code\\GPTS\\nous-hermes-13b.ggmlv3.q4_0.bin")
@@ -28,7 +31,9 @@ class LLMAgent():
         tm_qdb: CollectionOperator = None, 
         rm_qdb: CollectionOperator = None, 
         summarizer: Summarizer = None, 
+        search_engine: SearchEngine = None,
         use_summarizer = True,
+       
     ) -> None:
 
         self.llm = llm
@@ -36,22 +41,23 @@ class LLMAgent():
         self.rm_qdb = rm_qdb
         self.memory_access_threshold = 1.5
         self.top_k = 3
-        self.use_summarizer = use_summarizer
-
+        self.use_mem_summarizer = use_summarizer
+       
         self.summarizer = summarizer
+        self.search_engine = search_engine
        
 
     @logging(enable_logging, message = "[Adding to memory]")
     def add(self, request):
-        # summary = self.summarizer(f"{self.llm.user}:\n{request}\n{self.llm.assistant}:\n{''.join(llm_response)}")
+        # summary = self.summarizer(f"{self.llm.user}:\n{request}\n{self.llm.assistant}:\n{''.join(response)}")
         
-        summary = self.summarizer(request) if self.use_summarizer else request
+        summary = self.summarizer(request) if self.use_mem_summarizer else request
 
         self.tm_qdb.add(summary) if summary != "" else None
 
-        llm_response = self.llm.response(request)
+        response = self.llm.response(request)
 
-        return llm_response
+        return response
 
     @logging(enable_logging, message = "[Querying memory]")
     def memory_response(self, request):
@@ -66,16 +72,22 @@ class LLMAgent():
                 acceptable_memory_queries.append(query)
 
         if len(acceptable_memory_queries) > 0:
-            llm_response = self.llm.memory_response(request, acceptable_memory_queries)
+            response = self.llm.memory_response(request, acceptable_memory_queries)
         else:
-            llm_response = self.llm.response(request)
+            response = self.llm.response(request)
 
-        return llm_response
+        return response
 
     @logging(enable_logging, message = "[Searching]")
     def search(self, request):
-        pass
-    
+        search_response = self.search_engine.search(request)
+
+        for response in search_response:
+            response['content'] = self.summarizer(response['content'])
+
+        return self.llm.search_response(request, search_response)
+
+
     @logging(enable_logging, message = "[Response]")
     def response(self, request):
         return self.llm.response(request)
@@ -83,16 +95,16 @@ class LLMAgent():
     
     def generate(self, request: str):
         if request.upper().startswith("MEM"):
-            llm_response = self.memory_response(request[len("MEM"):])
+            response = self.memory_response(request[len("MEM"):])
         elif request.upper().startswith("REMEM"): #and len(acceptable_memory_queries) == 0
-            llm_response = self.add(request[len("REMEM"):])
+            response = self.add(request[len("REMEM"):])
         elif request.upper().startswith("WEB"):
-            llm_response = self.search(request[len("WEB"):])
+            response = self.search(request[len("WEB"):])
         else:
-            llm_response = self.response(request)
+            response = self.response(request)
             
-        return llm_response
+        return response
 
     
 
-llm_agent = LLMAgent(llm, tm_collection_operator, rm_collection_operator, summarizer, use_summarizer = False)
+llm_agent = LLMAgent(llm, tm_collection_operator, rm_collection_operator, summarizer, search_engine, use_summarizer = False)
