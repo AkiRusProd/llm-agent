@@ -3,8 +3,8 @@ import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from transformers import pipeline
 from dotenv import dotenv_values
-env = dotenv_values(".env")
 
+env = dotenv_values(".env")
 os.environ['HUGGINGFACE_HUB_CACHE'] = env['HUGGINGFACE_HUB_CACHE']
 
 # checkpoint = "t5-small"
@@ -34,13 +34,15 @@ checkpoint = "sshleifer/distilbart-cnn-12-6"
 
 class Summarizer():
     def __init__(self, model = checkpoint) -> None:
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model).to('cuda' if torch.cuda.is_available() else 'cpu')
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(model).to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(model)
 
         # self.model = BartForConditionalGeneration.from_pretrained(model_name)#.to('cuda')
         # self.tokenizer = BartTokenizer.from_pretrained(model_name)
 
     def summarize(self, text: str, min_length = 30, max_length = 100):
+        """Fixed-size chunking"""
         inputs_no_trunc = self.tokenizer(text, max_length=None, return_tensors='pt', truncation=False)
         if len(inputs_no_trunc['input_ids'][0]) < 30:
             return text
@@ -57,7 +59,7 @@ class Summarizer():
             inputs_batch_lst.append(inputs_batch)
             chunk_start += self.tokenizer.model_max_length  # == 1024 for Bart
             chunk_end += self.tokenizer.model_max_length  # == 1024 for Bart
-        summary_ids_lst = [self.model.generate(inputs, num_beams=4, min_length=min_length, max_length=max_length, early_stopping=True) for inputs in inputs_batch_lst]
+        summary_ids_lst = [self.model.generate(inputs.to(self.device), num_beams=4, min_length=min_length, max_length=max_length, early_stopping=True) for inputs in inputs_batch_lst]
 
         summary_batch_lst = []
         for summary_id in summary_ids_lst:

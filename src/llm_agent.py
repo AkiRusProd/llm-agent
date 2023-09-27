@@ -13,8 +13,8 @@ embedder = Embedder()
 
 
 llm = LLM("D:\\Code\\GPTS\\nous-hermes-13b.ggmlv3.q4_0.bin")
-tm_collection_operator = CollectionOperator("total-memory", embedder = embedder)
-rm_collection_operator = CollectionOperator("recent-memory", embedder = embedder) # TODO: add recent memory
+total_memory_co = CollectionOperator("total-memory", embedder = embedder)
+recent_memory_co = CollectionOperator("recent-memory", embedder = embedder) # TODO: add recent memory
 
 
 
@@ -40,8 +40,9 @@ class LLMAgent():
         self.tm_qdb = tm_qdb
         self.rm_qdb = rm_qdb
         self.memory_access_threshold = 1.5
+        # self.similarity_threshold = 0.5 # [0; 1]
         self.top_k = 3
-        self.use_mem_summarizer = use_summarizer
+        self.use_summarizer = use_summarizer
        
         self.summarizer = summarizer
         self.search_engine = search_engine
@@ -51,7 +52,7 @@ class LLMAgent():
     def add(self, request):
         # summary = self.summarizer(f"{self.llm.user}:\n{request}\n{self.llm.assistant}:\n{''.join(response)}")
         
-        summary = self.summarizer(request) if self.use_mem_summarizer else request
+        summary = self.summarize(request) if self.use_summarizer else request
 
         self.tm_qdb.add(summary) if summary != "" else None
 
@@ -69,6 +70,7 @@ class LLMAgent():
 
         for query, distance in list(zip(memory_queries, memory_queries_distances)):
             if distance < self.memory_access_threshold:
+            # if (1 - distance) >= self.similarity_threshold:
                 acceptable_memory_queries.append(query)
 
         if len(acceptable_memory_queries) > 0:
@@ -83,9 +85,13 @@ class LLMAgent():
         search_response = self.search_engine.search(request)
 
         for response in search_response:
-            response['content'] = self.summarizer(response['content'])
+            response['content'] = self.summarize(response['content'])
 
         return self.llm.search_response(request, search_response)
+
+    @logging(enable_logging, message = "[Summarizing]", color = "green")
+    def summarize(self, text, min_length = 30, max_length = 100):
+        return self.summarizer(text, min_length, max_length)
 
 
     @logging(enable_logging, message = "[Response]")
@@ -107,4 +113,4 @@ class LLMAgent():
 
     
 
-llm_agent = LLMAgent(llm, tm_collection_operator, rm_collection_operator, summarizer, search_engine, use_summarizer = False)
+llm_agent = LLMAgent(llm, total_memory_co, recent_memory_co, summarizer, search_engine, use_summarizer = False)

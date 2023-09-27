@@ -19,7 +19,7 @@ class LLM():
         """ 
 
         self.search_context = lambda question: f"""
-        You have been given access to the Internet. By considering below search results, answer the question if its provided in search result, else just answer without memory: {question}
+        You have been given access to the Internet. By considering below search results, summarize the information if its provided in search result, else just answer without search results: {question}
         """
 
     def response(self, request):

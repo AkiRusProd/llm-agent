@@ -19,7 +19,7 @@ class CollectionOperator():
 
         self.collection.add(
             documents = [text],
-            metadatas = [metadata], # add embeddings
+            metadatas = [metadata],
             ids = [str(uuid.uuid4())]
         )
 

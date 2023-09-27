@@ -24,7 +24,7 @@ class SearchEngine():
             'start': start,  # Index of the first search result
             'cx': SEARCH_ENGINE_ID,
             'num': num,  # Number of search results to return
-            'dateRestrict': date_restrict,  # Date restriction for search results
+            # 'dateRestrict': date_restrict,  # Date restriction for search results
         
         }
         payload.update(params)  # Additional optional parameters
