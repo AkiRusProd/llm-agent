@@ -6,7 +6,7 @@ This repository enables the language model to use long-term memory through a vec
 
 
 ### Current features:
-- add new memory: type _`remem`_ before your query (add your query to memory to db)
+- add new memory: type _`remem`_ before your query (add your query to vector db)
 - query memory: type _`mem`_ before your query (query most relevant memory from db)
 - web search: type _`web`_ before your query (search in google)
 
