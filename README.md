@@ -5,6 +5,14 @@ LLM using long-term memory through vector database
 This repository enables the language model to use long-term memory through a vector database. The application is built using [gpt4all nous-hermes-13b llm](https://gpt4all.io/index.html) and [chromadb](https://github.com/chroma-core/chroma).
 
 
+### Current features:
+- add new memory: type _`remem`_ before your query (add your query to memory to db)
+- query memory: type _`mem`_ before your query (query most relevant memory from db)
+- web search: type _`web`_ before your query (search in google)
+
+### Diagram:
+![Diagram](images/llm-agent.png)
+
 ### Example:
 ```
 You > Hi
@@ -18,5 +26,9 @@ LOG: [Querying memory]
 Bot < According to the input memories, your name is Rustam Akimov.
 ```
 
-TODO:   
-Add forgetting mechanism
+### Usage:
+- Install requirements.txt
+- Download [gpt4all nous-hermes-13b llm](https://gpt4all.io/index.html) 
+- Get [Google API key](https://developers.google.com/webmaster-tools/search-console-api/v1/configure) and [Search Engine ID](https://programmablesearchengine.google.com/controlpanel/create)
+- Specify variables in .env
+- Run [chat.py](src/chat.py)

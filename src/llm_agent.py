@@ -4,7 +4,8 @@ from search_engine import SearchEngine
 from summarizer import Summarizer
 from embedder import Embedder
 from utils import logging
-
+from dotenv import dotenv_values
+env = dotenv_values(".env")
 
 search_engine = SearchEngine()
 summarizer = Summarizer()
@@ -12,9 +13,9 @@ embedder = Embedder()
 
 
 
-llm = LLM("D:\\Code\\GPTS\\nous-hermes-13b.ggmlv3.q4_0.bin")
+llm = LLM(env['GPT4ALL_LLM'])
 total_memory_co = CollectionOperator("total-memory", embedder = embedder)
-recent_memory_co = CollectionOperator("recent-memory", embedder = embedder) # TODO: add recent memory
+
 
 
 
@@ -29,7 +30,6 @@ class LLMAgent():
         self, 
         llm: LLM = None, 
         tm_qdb: CollectionOperator = None, 
-        rm_qdb: CollectionOperator = None, 
         summarizer: Summarizer = None, 
         search_engine: SearchEngine = None,
         use_summarizer = True,
@@ -38,10 +38,10 @@ class LLMAgent():
 
         self.llm = llm
         self.tm_qdb = tm_qdb
-        self.rm_qdb = rm_qdb
         self.memory_access_threshold = 1.5
         # self.similarity_threshold = 0.5 # [0; 1]
-        self.top_k = 3
+        self.db_n_results = 3
+        self.se_n_results = 3
         self.use_summarizer = use_summarizer
        
         self.summarizer = summarizer
@@ -62,7 +62,7 @@ class LLMAgent():
 
     @logging(enable_logging, message = "[Querying memory]")
     def memory_response(self, request):
-        memory_queries_data = self.tm_qdb.query(request, n_results = self.top_k, return_text = False)
+        memory_queries_data = self.tm_qdb.query(request, n_results = self.db_n_results, return_text = False)
         memory_queries = memory_queries_data['documents'][0]
         memory_queries_distances = memory_queries_data['distances'][0]
 
@@ -82,7 +82,7 @@ class LLMAgent():
 
     @logging(enable_logging, message = "[Searching]")
     def search(self, request):
-        search_response = self.search_engine.search(request)
+        search_response = self.search_engine.search(request, n_results = self.se_n_results)
 
         for response in search_response:
             response['content'] = self.summarize(response['content'])
@@ -113,4 +113,4 @@ class LLMAgent():
 
     
 
-llm_agent = LLMAgent(llm, total_memory_co, recent_memory_co, summarizer, search_engine, use_summarizer = False)
+llm_agent = LLMAgent(llm, total_memory_co, summarizer, search_engine, use_summarizer = False)
