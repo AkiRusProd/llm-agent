@@ -60,4 +60,4 @@ class LlamaCPPLLM(BaseLLM):
         self.gpt = Llama(model_path = model_name, n_ctx=2048, verbose=False)
 
     def generate(self, request: str, streaming: bool) -> Any:
-        return self.gpt.create_completion(prompt = request, stream = streaming, stop=[f"{self.user}:", "\n"])
+        return self.gpt.create_completion(prompt = request, stream = streaming, stop=[f"{self.user}:"])
