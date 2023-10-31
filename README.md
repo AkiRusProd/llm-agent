@@ -31,5 +31,5 @@ Bot < According to the input memories, your name is Rustam Akimov.
 - Download [nous-hermes-13b llm](https://gpt4all.io/index.html) (Note: you can use other models)
 - Get [Google API key](https://developers.google.com/webmaster-tools/search-console-api/v1/configure) and [Search Engine ID](https://programmablesearchengine.google.com/controlpanel/create)
 - Specify variables in .env
-- Specify GPT4All or LLAMA_cpp_python bindings in [chat.py](src/chat.py)
+- Choose [GPT4All](https://github.com/nomic-ai/gpt4all) or [LLAMA_cpp_python](https://github.com/abetlen/llama-cpp-python) bindings in [chat.py](src/chat.py)
 - Run [chat.py](src/chat.py)
