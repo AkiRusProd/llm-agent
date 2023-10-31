@@ -1,22 +1,11 @@
-from llm import LLM
-from query_db import CollectionOperator
+from llm import BaseLLM
+from embedder import Embedder
 from search_engine import SearchEngine
 from summarizer import Summarizer
-from embedder import Embedder
+from query_db import CollectionOperator
+
+
 from utils import logging
-from dotenv import dotenv_values
-env = dotenv_values(".env")
-
-search_engine = SearchEngine()
-summarizer = Summarizer()
-embedder = Embedder()
-
-
-
-llm = LLM(env['GPT4ALL_LLM'])
-total_memory_co = CollectionOperator("total-memory", embedder = embedder)
-
-
 
 
 
@@ -28,7 +17,7 @@ enable_logging = True
 class LLMAgent():
     def __init__(
         self, 
-        llm: LLM = None, 
+        llm: BaseLLM = None, 
         tm_qdb: CollectionOperator = None, 
         summarizer: Summarizer = None, 
         search_engine: SearchEngine = None,
@@ -111,6 +100,3 @@ class LLMAgent():
             
         return response
 
-    
-
-llm_agent = LLMAgent(llm, total_memory_co, summarizer, search_engine, use_summarizer = False)

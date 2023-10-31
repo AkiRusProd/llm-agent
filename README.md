@@ -2,7 +2,7 @@
 LLM using long-term memory through vector database
 
 ## Description
-This repository enables the language model to use long-term memory through a vector database. The application is built using [gpt4all nous-hermes-13b llm](https://gpt4all.io/index.html) and [chromadb](https://github.com/chroma-core/chroma).
+This repository enables the language model to use long-term memory through a vector database. The application is built using [nous-hermes-13b llm](https://gpt4all.io/index.html) and [chromadb](https://github.com/chroma-core/chroma).
 
 
 ### Current features:
@@ -28,7 +28,8 @@ Bot < According to the input memories, your name is Rustam Akimov.
 
 ### Usage:
 - Install requirements.txt
-- Download [gpt4all nous-hermes-13b llm](https://gpt4all.io/index.html) 
+- Download [nous-hermes-13b llm](https://gpt4all.io/index.html) (Note: you can use other models)
 - Get [Google API key](https://developers.google.com/webmaster-tools/search-console-api/v1/configure) and [Search Engine ID](https://programmablesearchengine.google.com/controlpanel/create)
 - Specify variables in .env
+- Specify GPT4All or LLAMA_cpp_python bindings in [chat.py](src/chat.py)
 - Run [chat.py](src/chat.py)
