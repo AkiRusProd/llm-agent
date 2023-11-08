@@ -1,8 +1,8 @@
 # long-term-memory-llm
-LLM using long-term memory through vector database
+RAG-based LLM using long-term memory through vector database        
 
 ## Description
-This repository enables the language model to use long-term memory through a vector database. The application is built using [nous-hermes-13b llm](https://gpt4all.io/index.html) and [chromadb](https://github.com/chroma-core/chroma).
+This repository enables the large language model to use long-term memory through a vector database (This method is called RAG (Retrieval Augmented Generation) — this is a technique that allows LLM to retrieve facts from an external database). The application is built using LLaMA-based [nous-hermes-13b LLM](https://gpt4all.io/index.html) and [chromadb](https://github.com/chroma-core/chroma). 
 
 
 ### Current features:
@@ -28,7 +28,7 @@ Bot < According to the input memories, your name is Rustam Akimov.
 
 ### Usage:
 - Install requirements.txt
-- Download [nous-hermes-13b llm](https://gpt4all.io/index.html) (Note: you can use other models)
+- Download [nous-hermes-13b](https://gpt4all.io/index.html) (Note: you can use other LLaMA-based models)
 - Get [Google API key](https://developers.google.com/webmaster-tools/search-console-api/v1/configure) and [Search Engine ID](https://programmablesearchengine.google.com/controlpanel/create)
 - Specify variables in .env
 - Choose [GPT4All](https://github.com/nomic-ai/gpt4all) or [LLAMA_cpp_python](https://github.com/abetlen/llama-cpp-python) bindings in [chat.py](src/chat.py)

@@ -1,6 +1,6 @@
 from llm_agent import LLMAgent
 from llm import LlamaCPPLLM, GPT4AllLLM
-from embedder import Embedder
+from embedder import HFEmbedder, GPT4AllEmbedder
 from search_engine import SearchEngine
 from summarizer import Summarizer
 from query_db import CollectionOperator
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     llm.user = "### Instruction" #"USER"
     llm.assistant = "### Response" #"ASSISTANT"
     
-    embedder = Embedder()
+    embedder = HFEmbedder()
     search_engine = SearchEngine()
     summarizer = Summarizer()
 

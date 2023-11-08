@@ -1,7 +1,7 @@
 import chromadb
 import uuid
 import datetime
-from embedder import Embedder
+from embedder import BaseEmbedder, HFEmbedder
 from dotenv import dotenv_values
 
 env = dotenv_values(".env")
@@ -9,7 +9,7 @@ DB_PATH = env["DB_PATH"]
 
 
 class CollectionOperator():
-    def __init__(self, collection_name, db_path = DB_PATH, embedder: Embedder = None):
+    def __init__(self, collection_name, db_path = DB_PATH, embedder: BaseEmbedder = None):
         self.embedder = embedder
         self.client = chromadb.PersistentClient(path = db_path)
         self.collection = self.client.get_or_create_collection(name = collection_name, embedding_function = self.embedder.get_embeddings)
@@ -38,7 +38,10 @@ class CollectionOperator():
             return query
 
 
-# collection_operator = CollectionOperator("total-memory", embedder = Embedder())
+# collection_operator = CollectionOperator("total-memory", embedder = HFEmbedder())
+# collection_operator.add("Memory refers to the psychological processes of  storing information")
+# results = collection_operator.query("What is a memory?", 1, return_text = False)
+# print(results)
 # print(collection_operator.client.list_collections())
 # print(len(collection_operator.collection.get()["ids"]))
 # print(collection_operator.collection.get()["ids"])

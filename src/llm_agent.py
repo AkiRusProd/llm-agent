@@ -1,5 +1,4 @@
 from llm import BaseLLM
-from embedder import Embedder
 from search_engine import SearchEngine
 from summarizer import Summarizer
 from query_db import CollectionOperator
@@ -58,6 +57,7 @@ class LLMAgent():
         acceptable_memory_queries = []
 
         for query, distance in list(zip(memory_queries, memory_queries_distances)):
+            # print(f"Query: {query}, Distance: {distance}")
             if distance < self.memory_access_threshold:
             # if (1 - distance) >= self.similarity_threshold:
                 acceptable_memory_queries.append(query)
@@ -65,7 +65,7 @@ class LLMAgent():
         if len(acceptable_memory_queries) > 0:
             response = self.llm.memory_response(request, acceptable_memory_queries)
         else:
-            response = self.llm.response(request)
+            response = self.llm.response(request) #TODO: add another solution
 
         return response
 
