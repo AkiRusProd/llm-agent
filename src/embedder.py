@@ -19,8 +19,8 @@ class BaseEmbedder(EmbeddingFunction):
     def get_embeddings(self, texts):
         raise NotImplementedError("Subclasses should implement this!")
 
-    def __call__(self, text):
-        return self.get_embeddings(text)
+    def __call__(self, input):
+        return self.get_embeddings(input)
 
 
 class GPT4AllEmbedder(BaseEmbedder):
@@ -37,9 +37,6 @@ class GPT4AllEmbedder(BaseEmbedder):
 
         return embeddings
 
-    def __call__(self, text):
-        return self.get_embeddings(text)
-
 
 # https://huggingface.co/princeton-nlp/sup-simcse-roberta-large
 class HFEmbedder(BaseEmbedder):
@@ -48,7 +45,6 @@ class HFEmbedder(BaseEmbedder):
         self.model = AutoModel.from_pretrained(model).to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained(model)
         
-
     def get_embeddings(self, texts):
         if type(texts) == str:
             texts = [texts]
@@ -62,7 +58,4 @@ class HFEmbedder(BaseEmbedder):
         normalized_embeddings = embeddings / norms
 
         return normalized_embeddings.tolist()
-
-    def __call__(self, text):
-        return self.get_embeddings(text)
 

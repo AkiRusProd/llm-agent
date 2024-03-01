@@ -12,7 +12,7 @@ class CollectionOperator():
     def __init__(self, collection_name, db_path = DB_PATH, embedder: BaseEmbedder = None):
         self.embedder = embedder
         self.client = chromadb.PersistentClient(path = db_path)
-        self.collection = self.client.get_or_create_collection(name = collection_name, embedding_function = self.embedder.get_embeddings)
+        self.collection = self.client.get_or_create_collection(name = collection_name, embedding_function = self.embedder)
 
     def add(self, text, metadata = {}):
         metadata['timestamp'] = str(datetime.datetime.now())

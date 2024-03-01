@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "llm_agent"
+version = "0.1.0"
+description = "LLM using long-term memory through vector database"
+authors = ["Rustam Akimov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+chromadb = "^0.4.24"
+gpt4all = "^2.2.1.post1"
+llama-cpp-python = "^0.2.53"
+bs4 = "^0.0.2"
+torch = "^2.2.1"
+transformers = "^4.38.1"
+tokenizers = "^0.15.2"
+termcolor = "^2.4.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
