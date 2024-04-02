@@ -3,7 +3,7 @@ from llm import LlamaCPPLLM, GPT4AllLLM
 from embedder import HFEmbedder, GPT4AllEmbedder
 from search_engine import SearchEngine
 from summarizer import Summarizer
-from query_db import CollectionOperator
+from db import DBInstance
 from dotenv import dotenv_values
 
 env = dotenv_values(".env")
@@ -57,8 +57,8 @@ if __name__ == "__main__":
     search_engine = SearchEngine()
     summarizer = Summarizer()
 
-    total_memory_co = CollectionOperator("total-memory", embedder = embedder)
+    db_instance = DBInstance("long-term-memory", embedder = embedder)
 
-    llm_agent = LLMAgent(llm, total_memory_co, summarizer, search_engine, use_summarizer = False)
+    llm_agent = LLMAgent(llm, db_instance, summarizer, search_engine, use_summarizer = False)
 
     chat()

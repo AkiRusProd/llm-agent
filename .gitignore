@@ -161,5 +161,7 @@ cython_debug/
 
 .venv/
 db/
+models/
+hf-models/
 test.py
 .google-cookie

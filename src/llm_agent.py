@@ -1,7 +1,7 @@
 from llm import BaseLLM
 from search_engine import SearchEngine
 from summarizer import Summarizer
-from query_db import CollectionOperator
+from db import DBInstance
 
 
 from utils import logging
@@ -17,7 +17,7 @@ class LLMAgent():
     def __init__(
         self, 
         llm: BaseLLM = None, 
-        tm_qdb: CollectionOperator = None, 
+        db_instance: DBInstance = None, 
         summarizer: Summarizer = None, 
         search_engine: SearchEngine = None,
         use_summarizer = True,
@@ -25,7 +25,7 @@ class LLMAgent():
     ) -> None:
 
         self.llm = llm
-        self.tm_qdb = tm_qdb
+        self.db_instance = db_instance
         self.memory_access_threshold = 1.5
         # self.similarity_threshold = 0.5 # [0; 1]
         self.db_n_results = 3
@@ -42,7 +42,7 @@ class LLMAgent():
         
         summary = self.summarize(request) if self.use_summarizer else request
 
-        self.tm_qdb.add(summary) if summary != "" else None
+        self.db_instance.add(summary) if summary != "" else None
 
         response = self.llm.response(request)
 
@@ -50,7 +50,7 @@ class LLMAgent():
 
     @logging(enable_logging, message = "[Querying memory]")
     def memory_response(self, request):
-        memory_queries_data = self.tm_qdb.query(request, n_results = self.db_n_results, return_text = False)
+        memory_queries_data = self.db_instance.query(request, n_results = self.db_n_results, return_text = False)
         memory_queries = memory_queries_data['documents'][0]
         memory_queries_distances = memory_queries_data['distances'][0]
 
