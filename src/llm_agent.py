@@ -61,7 +61,8 @@ class LLMAgent:
         prompt_template = """\
         By considering below input memories from me, answer the question if its provided in memory, else just answer without memory:
         QUESTION:
-        `{text}`MEMORY CHUNKS:{context}
+        `{text}`
+        MEMORY CHUNKS:{context}
         """
 
         context = ""
