@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "llm_agent"
-version = "0.1.0"
+version = "0.1.1"
 description = "LLM using long-term memory through vector database"
 authors = ["Rustam Akimov"]
 readme = "README.md"
@@ -15,6 +15,7 @@ torch = "^2.2.1"
 transformers = "^4.38.1"
 tokenizers = "^0.15.2"
 termcolor = "^2.4.0"
+guidance = "^0.1.13"
 
 
 [build-system]
