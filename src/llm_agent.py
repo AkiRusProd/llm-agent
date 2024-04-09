@@ -62,7 +62,8 @@ class LLMAgent:
         By considering below input memories from me, answer the question if its provided in memory, else just answer without memory:
         QUESTION:
         `{text}`
-        MEMORY CHUNKS:{context}
+        MEMORY CHUNKS:
+        {context}
         """
 
         context = ""
